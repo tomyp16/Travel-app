@@ -1,19 +1,13 @@
 import React, {useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import {normalize} from '../component/Metrics';
 import {useNavigation} from '@react-navigation/native';
 import {RootScreenNavigationProps} from '../../type';
 import axios from 'axios';
+import ButtonTouch from '../component/ButtonTouch';
+import ButtonTextInput from '../component/TextInput';
 
-const Registration = () => {
-  const Navigation = useNavigation<RootScreenNavigationProps>();
-
+const Registration = ({route, navigation}: RootScreenNavigationProps) => {
   const [UserInfo, setUserInfo] = useState({
     email: '',
     password: '',
@@ -21,6 +15,7 @@ const Registration = () => {
   });
 
   const _HandleRegistration = () => {
+    console.log(UserInfo);
     if (!UserInfo.email || !UserInfo.password || !UserInfo.name) {
       console.log('kosong');
     } else {
@@ -46,50 +41,59 @@ const Registration = () => {
 
   return (
     <View style={styles.MainContainer}>
-      <View style={{padding: normalize(10)}}>
-        <Text style={{...styles.LabelText, fontSize: normalize(20)}}>
-          Login
+      <View style={styles.ContainerForm}>
+        <Text
+          style={{
+            ...styles.LabelText,
+            fontSize: normalize(25),
+            textAlign: 'center',
+          }}>
+          Create Account
         </Text>
 
-        <Text style={styles.LabelText}>Name</Text>
-        <TextInput
-          placeholder="Insert your name"
-          placeholderTextColor={'grey'}
-          style={styles.textInputStyle}
-          onChangeText={newText =>
-            setUserInfo({...UserInfo, name: newText})
-          }></TextInput>
+        <View style={{paddingVertical: normalize(10)}}>
+          <ButtonTextInput
+            placeholder="Name"
+            placeholderTextColor={'grey'}
+            // label="Email"
+            borderBottomColor="#118EEA"
+            onChangeText={newText => setUserInfo({...UserInfo, name: newText})}
+          />
 
-        <Text style={styles.LabelText}>email</Text>
-        <TextInput
-          placeholder="Insert your email"
-          placeholderTextColor={'grey'}
-          style={styles.textInputStyle}
-          onChangeText={newText =>
-            setUserInfo({...UserInfo, email: newText})
-          }></TextInput>
+          <ButtonTextInput
+            placeholder="Email"
+            placeholderTextColor={'grey'}
+            // label="Email"
+            borderBottomColor="#118EEA"
+            keyboardType="email-address"
+            onChangeText={newText => setUserInfo({...UserInfo, email: newText})}
+          />
 
-        <Text style={styles.LabelText}>password</Text>
-        <TextInput
-          placeholder="Insert your password"
-          placeholderTextColor={'grey'}
-          style={styles.textInputStyle}
-          secureTextEntry={true}
-          onChangeText={newText =>
-            setUserInfo({...UserInfo, password: newText})
-          }></TextInput>
+          <ButtonTextInput
+            placeholder="Password"
+            placeholderTextColor={'grey'}
+            // label="Password"
+            borderBottomColor="#118EEA"
+            type="password"
+            onChangeText={newText =>
+              setUserInfo({...UserInfo, password: newText})
+            }
+          />
+        </View>
 
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() => _HandleRegistration()}>
-          <Text style={styles.LabelText}>Sing In</Text>
-        </TouchableOpacity>
+        <View style={{paddingVertical: normalize(10)}}>
+          <ButtonTouch
+            label="Create Account"
+            width={'100%'}
+            onPress={() => _HandleRegistration()}
+          />
 
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() => Navigation.navigate('Registration')}>
-          <Text style={styles.LabelText}>Registrasi</Text>
-        </TouchableOpacity>
+          <ButtonTouch
+            title={`Already have an account?`}
+            label="Login"
+            onPress={() => navigation.navigate('Login')}
+          />
+        </View>
       </View>
     </View>
   );
@@ -101,6 +105,7 @@ const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#118EEA',
   },
   LabelText: {
     fontSize: normalize(15),
@@ -125,5 +130,11 @@ const styles = StyleSheet.create({
     padding: normalize(10),
     borderRadius: normalize(20),
     margin: normalize(5),
+  },
+  ContainerForm: {
+    padding: normalize(15),
+    backgroundColor: '#FFF',
+    margin: normalize(40),
+    borderRadius: 20,
   },
 });

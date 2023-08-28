@@ -48,42 +48,49 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
   return (
     <View style={styles.MainContainer}>
       <View style={styles.ContainerForm}>
-        <Text style={{...styles.LabelText, fontSize: normalize(20)}}>
-          Login
+        <Text
+          style={{
+            ...styles.LabelText,
+            fontSize: normalize(25),
+            textAlign: 'center',
+          }}>
+          Login Account
         </Text>
 
-
-        <View style={{paddingVertical:normalize(10)}}>
+        <View style={{paddingVertical: normalize(10)}}>
           <ButtonTextInput
-            placeholder="Insert your email"
+            placeholder="Email"
             placeholderTextColor={'grey'}
             // label="Email"
             borderBottomColor="#118EEA"
-            onChangeText={newText =>
-              setUserInfo({...UserInfo, email: newText})
-            }
+            onChangeText={newText => setUserInfo({...UserInfo, email: newText})}
           />
 
           <ButtonTextInput
-            placeholder="Insert your password"
+            placeholder="Password"
             placeholderTextColor={'grey'}
             // label="Password"
             borderBottomColor="#118EEA"
+            type="password"
             onChangeText={newText =>
               setUserInfo({...UserInfo, password: newText})
             }
           />
         </View>
 
-       <View style={{paddingVertical:normalize(10)}}>
-        <ButtonTouch
+        <View style={{paddingVertical: normalize(10)}}>
+          <ButtonTouch
             label="Login"
-            onPress={() => _HandleLogin()}/>
+            width={'100%'}
+            onPress={() => _HandleLogin()}
+          />
 
           <ButtonTouch
-            label="Registration"
-            onPress={() => navigation.navigate('Registration')}/>
-       </View>
+            title={`Don't have an account?`}
+            label="Register"
+            onPress={() => navigation.navigate('Registration')}
+          />
+        </View>
       </View>
     </View>
   );
@@ -95,7 +102,7 @@ const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor:'#118EEA'
+    backgroundColor: '#118EEA',
   },
   LabelText: {
     fontSize: normalize(15),
@@ -121,15 +128,10 @@ const styles = StyleSheet.create({
     borderRadius: normalize(20),
     margin: normalize(5),
   },
-  ContainerForm:{
+  ContainerForm: {
     padding: normalize(15),
-    backgroundColor:'#FFF',
-    margin:normalize(40),
+    backgroundColor: '#FFF',
+    margin: normalize(40),
     borderRadius: 20,
-    // shadowColor: '#000',
-    // shadowOffset: {width: 0, height: 2},
-    // shadowOpacity: 0.3,
-    // shadowRadius: 2,
-    // elevation: 3,
-  }
+  },
 });
