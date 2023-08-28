@@ -47,55 +47,43 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
 
   return (
     <View style={styles.MainContainer}>
-      <View style={{padding: normalize(10)}}>
+      <View style={styles.ContainerForm}>
         <Text style={{...styles.LabelText, fontSize: normalize(20)}}>
           Login
         </Text>
 
-        <Text style={styles.LabelText}>email</Text>
-        <TextInput
-          placeholder="Insert your email"
-          placeholderTextColor={'grey'}
-          style={styles.textInputStyle}
-          onChangeText={newText =>
-            setUserInfo({...UserInfo, email: newText})
-          }></TextInput>
 
-        <Text style={styles.LabelText}>password</Text>
-        <TextInput
-          placeholder="Insert your password"
-          placeholderTextColor={'grey'}
-          style={styles.textInputStyle}
-          secureTextEntry={true}
-          onChangeText={newText =>
-            setUserInfo({...UserInfo, password: newText})
-          }></TextInput>
+        <View style={{paddingVertical:normalize(10)}}>
+          <ButtonTextInput
+            placeholder="Insert your email"
+            placeholderTextColor={'grey'}
+            // label="Email"
+            borderBottomColor="#118EEA"
+            onChangeText={newText =>
+              setUserInfo({...UserInfo, email: newText})
+            }
+          />
 
-        <ButtonTextInput
-          placeholder="Insert your password"
-          placeholderTextColor={'grey'}
-          label="Email"
-          onChangeText={newText =>
-            setUserInfo({...UserInfo, password: newText})
-          }
-        />
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() => _HandleLogin()}>
-          <Text style={styles.LabelText}>Sing In</Text>
-        </TouchableOpacity>
+          <ButtonTextInput
+            placeholder="Insert your password"
+            placeholderTextColor={'grey'}
+            // label="Password"
+            borderBottomColor="#118EEA"
+            onChangeText={newText =>
+              setUserInfo({...UserInfo, password: newText})
+            }
+          />
+        </View>
 
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() => navigation.navigate('Registration')}>
-          <Text style={styles.LabelText}>Registrasi</Text>
-        </TouchableOpacity>
-
+       <View style={{paddingVertical:normalize(10)}}>
         <ButtonTouch
-          label="Login"
-          onPress={() => console.log('sini')}
-          padding={normalize(15)}
-        />
+            label="Login"
+            onPress={() => _HandleLogin()}/>
+
+          <ButtonTouch
+            label="Registration"
+            onPress={() => navigation.navigate('Registration')}/>
+       </View>
       </View>
     </View>
   );
@@ -107,6 +95,7 @@ const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor:'#118EEA'
   },
   LabelText: {
     fontSize: normalize(15),
@@ -132,4 +121,15 @@ const styles = StyleSheet.create({
     borderRadius: normalize(20),
     margin: normalize(5),
   },
+  ContainerForm:{
+    padding: normalize(15),
+    backgroundColor:'#FFF',
+    margin:normalize(40),
+    borderRadius: 20,
+    // shadowColor: '#000',
+    // shadowOffset: {width: 0, height: 2},
+    // shadowOpacity: 0.3,
+    // shadowRadius: 2,
+    // elevation: 3,
+  }
 });
