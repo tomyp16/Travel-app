@@ -83,7 +83,7 @@ const Registration = ({route, navigation}: RootScreenNavigationProps) => {
 
         <View style={{paddingVertical: normalize(10)}}>
           <ButtonTouch
-            label="Create Account"
+            label="Create"
             width={'100%'}
             onPress={() => _HandleRegistration()}
           />
@@ -91,6 +91,8 @@ const Registration = ({route, navigation}: RootScreenNavigationProps) => {
           <ButtonTouch
             title={`Already have an account?`}
             label="Login"
+            fontSize={normalize(12)}
+            fontSizeTitle={normalize(12)}
             onPress={() => navigation.navigate('Login')}
           />
         </View>

@@ -20,6 +20,7 @@ type Value = {
   fontWeightTitle: undefined;
   fontFamilyTitle: string;
   fontStyleTitle: undefined;
+  fontSizeTitle: string;
   backgroundColor: string;
   justifyContent: undefined;
   onPress: undefined;
@@ -62,7 +63,7 @@ const ButtonTouch = (props: Value) => {
       fontStyle: props.fontStyleLabel || 'normal',
     },
     Title: {
-      fontSize: props.fontSize || normalize(15),
+      fontSize: props.fontSizeTitle || normalize(15),
       color: props.title ? '#000' : props.color || '#FFF',
       fontWeight: props.fontWeightTitle || '400',
       fontFamily: props.fontFamilyTitle || 'Roboto',

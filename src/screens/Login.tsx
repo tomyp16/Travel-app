@@ -51,7 +51,7 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
         <Text
           style={{
             ...styles.LabelText,
-            fontSize: normalize(25),
+            fontSize: normalize(20),
             textAlign: 'center',
           }}>
           Login Account
@@ -88,6 +88,8 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
           <ButtonTouch
             title={`Don't have an account?`}
             label="Register"
+            fontSize={normalize(12)}
+            fontSizeTitle={normalize(12)}
             onPress={() => navigation.navigate('Registration')}
           />
         </View>
