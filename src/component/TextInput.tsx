@@ -108,9 +108,9 @@ const ButtonTextInput = (props: Value) => {
             style={styles.ButtonTouchStyle}
             onPress={() => setsecureTextEntry(!secureTextEntry)}>
             <IconFeather
-              name={secureTextEntry ? 'eye-off' : 'eye'}
+              name={!secureTextEntry ? 'eye-off' : 'eye'}
               size={normalize(20)}
-              color={!secureTextEntry ? '#118EEA' : '#C2BFBF'}
+              color={secureTextEntry ? '#118EEA' : '#C2BFBF'}
             />
           </TouchableOpacity>
         )}
