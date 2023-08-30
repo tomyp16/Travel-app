@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Text,
   View,
@@ -11,20 +11,20 @@ import {RootScreenNavigationProps} from '../../type';
 import axios from 'axios';
 import ButtonTouch from '../component/ButtonTouch';
 import ButtonTextInput from '../component/TextInput';
+import { UserContext } from '../context/authContext';
 
 const Login = ({route, navigation}: RootScreenNavigationProps) => {
+  const {_Login} = useContext(UserContext)
   const [UserInfo, setUserInfo] = useState({
     email: '',
     password: '',
   });
-  //   const _HandleRegist = () => {
-  //     navigation.navigate('Registration');
-  //   };
 
   const _HandleLogin = () => {
     if (!UserInfo.email || !UserInfo.password) {
       console.log('kosong');
     } else {
+
       let config = {
         method: 'post',
         url: `https://biroperjalanan.datacakra.com/api/authaccount/login`,
@@ -36,7 +36,10 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
       axios(config)
         .then(response => {
           if (response.data.message == 'success') {
-            navigation.navigate('Home');
+            _Login(response.data.data)
+            navigation.navigate('Home', 
+           UserInfo.password 
+          );
           }
         })
         .catch(error => {
