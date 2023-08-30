@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {normalize} from '../component/Metrics';
-import {useNavigation} from '@react-navigation/native';
 import {RootScreenNavigationProps} from '../../type';
 import axios from 'axios';
 import ButtonTouch from '../component/ButtonTouch';
 import ButtonTextInput from '../component/TextInput';
+import ContainerModal from '../component/ContainerModal';
 
 const Registration = ({route, navigation}: RootScreenNavigationProps) => {
   const [UserInfo, setUserInfo] = useState({
@@ -14,10 +14,26 @@ const Registration = ({route, navigation}: RootScreenNavigationProps) => {
     name: '',
   });
 
+  const [ModalCondition, setModalCondition] = useState({
+    Alert: false,
+    TextAlert: '',
+  });
+
   const _HandleRegistration = () => {
-    console.log(UserInfo);
     if (!UserInfo.email || !UserInfo.password || !UserInfo.name) {
-      console.log('kosong');
+      setModalCondition({
+        ...ModalCondition,
+        Alert: true,
+        TextAlert: 'The name, username and password fields cannot be empty!',
+      });
+
+      setTimeout(() => {
+        setModalCondition({
+          ...ModalCondition,
+          Alert: false,
+          TextAlert: '',
+        });
+      }, 3000);
     } else {
       let config = {
         method: 'post',
@@ -30,11 +46,45 @@ const Registration = ({route, navigation}: RootScreenNavigationProps) => {
       axios(config)
         .then(response => {
           if (response.data.message == 'success') {
-            Navigation.navigate('Home');
+            setModalCondition({
+              ...ModalCondition,
+              Alert: true,
+              TextAlert: 'Successfully register',
+            });
+
+            setTimeout(() => {
+              navigation.navigate('Login');
+
+              setModalCondition({
+                ...ModalCondition,
+                Alert: false,
+                TextAlert: '',
+              });
+
+              setTimeout(() => {
+                setUserInfo({
+                  email: '',
+                  password: '',
+                  name: '',
+                });
+              }, 2000);
+            }, 3000);
           }
         })
         .catch(error => {
-          console.log('error', error);
+          setModalCondition({
+            ...ModalCondition,
+            Alert: true,
+            TextAlert: 'Unsuccessful registration',
+          });
+
+          setTimeout(() => {
+            setModalCondition({
+              ...ModalCondition,
+              Alert: false,
+              TextAlert: '',
+            });
+          }, 3000);
         });
     }
   };
@@ -97,6 +147,37 @@ const Registration = ({route, navigation}: RootScreenNavigationProps) => {
           />
         </View>
       </View>
+
+      <ContainerModal
+        visible={ModalCondition.Alert}
+        justifyContentContainer="flex-start"
+        animation="fadeInDown"
+        backgroundColorAnimation="transparent"
+        backgroundColorContainer="transparent"
+        unVisibleStatus={false}
+        paddingVerticalAnimation={normalize(10)}
+        Body={
+          <View
+            style={{
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                borderRadius: 100,
+                padding: normalize(5),
+              }}>
+              <Text
+                style={{
+                  ...styles.LabelText,
+                  color: '#FFF',
+                }}>
+                {ModalCondition.TextAlert}
+              </Text>
+            </View>
+          </View>
+        }
+      />
     </View>
   );
 };

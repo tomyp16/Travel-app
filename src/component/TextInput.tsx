@@ -41,7 +41,8 @@ type Value = {
   fontStyleInput: string;
   type: string;
   keyboardType: string;
-  value:string;
+  value: string;
+  editable: boolean;
 };
 
 const ButtonTextInput = (props: Value) => {
@@ -102,7 +103,8 @@ const ButtonTextInput = (props: Value) => {
           onBlur={() => sethasFocus(false)}
           secureTextEntry={props.type ? secureTextEntry : false}
           keyboardType={props.keyboardType || 'default'}
-          value={props.value||null}
+          value={props.value || null}
+          editable={props.editable}
         />
 
         {props.type && (

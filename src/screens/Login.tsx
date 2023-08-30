@@ -11,20 +11,38 @@ import {RootScreenNavigationProps} from '../../type';
 import axios from 'axios';
 import ButtonTouch from '../component/ButtonTouch';
 import ButtonTextInput from '../component/TextInput';
-import { UserContext } from '../context/authContext';
+import {UserContext} from '../context/authContext';
+import ContainerModal from '../component/ContainerModal';
 
 const Login = ({route, navigation}: RootScreenNavigationProps) => {
-  const {_Login} = useContext(UserContext)
+  const {_Login, User} = useContext(UserContext);
+
   const [UserInfo, setUserInfo] = useState({
     email: '',
     password: '',
   });
 
+  const [ModalCondition, setModalCondition] = useState({
+    Alert: false,
+    TextAlert: '',
+  });
+
   const _HandleLogin = () => {
     if (!UserInfo.email || !UserInfo.password) {
-      console.log('kosong');
-    } else {
+      setModalCondition({
+        ...ModalCondition,
+        Alert: true,
+        TextAlert: 'The username and password fields cannot be empty!',
+      });
 
+      setTimeout(() => {
+        setModalCondition({
+          ...ModalCondition,
+          Alert: false,
+          TextAlert: '',
+        });
+      }, 3000);
+    } else {
       let config = {
         method: 'post',
         url: `https://biroperjalanan.datacakra.com/api/authaccount/login`,
@@ -36,14 +54,45 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
       axios(config)
         .then(response => {
           if (response.data.message == 'success') {
-            _Login(response.data.data)
-            navigation.navigate('Home', 
-           UserInfo.password 
-          );
+            _Login(response.data.data);
+            setModalCondition({
+              ...ModalCondition,
+              Alert: true,
+              TextAlert: 'Login successful',
+            });
+
+            setTimeout(() => {
+              navigation.navigate('Home', UserInfo.password);
+
+              setModalCondition({
+                ...ModalCondition,
+                Alert: false,
+                TextAlert: '',
+              });
+
+              setTimeout(() => {
+                setUserInfo({
+                  email: '',
+                  password: '',
+                });
+              }, 2000);
+            }, 3000);
           }
         })
         .catch(error => {
-          console.log('error', error);
+          setModalCondition({
+            ...ModalCondition,
+            Alert: true,
+            TextAlert: 'Login not successful',
+          });
+
+          setTimeout(() => {
+            setModalCondition({
+              ...ModalCondition,
+              Alert: false,
+              TextAlert: '',
+            });
+          }, 3000);
         });
     }
   };
@@ -66,6 +115,8 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
             placeholderTextColor={'grey'}
             // label="Email"
             borderBottomColor="#118EEA"
+            keyboardType="email-address"
+            value={UserInfo.email}
             onChangeText={newText => setUserInfo({...UserInfo, email: newText})}
           />
 
@@ -75,6 +126,7 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
             // label="Password"
             borderBottomColor="#118EEA"
             type="password"
+            value={UserInfo.password}
             onChangeText={newText =>
               setUserInfo({...UserInfo, password: newText})
             }
@@ -97,6 +149,37 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
           />
         </View>
       </View>
+
+      <ContainerModal
+        visible={ModalCondition.Alert}
+        justifyContentContainer="flex-start"
+        animation="fadeInDown"
+        backgroundColorAnimation="transparent"
+        backgroundColorContainer="transparent"
+        unVisibleStatus={false}
+        paddingVerticalAnimation={normalize(10)}
+        Body={
+          <View
+            style={{
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                borderRadius: 100,
+                padding: normalize(5),
+              }}>
+              <Text
+                style={{
+                  ...styles.LabelText,
+                  color: '#FFF',
+                }}>
+                {ModalCondition.TextAlert}
+              </Text>
+            </View>
+          </View>
+        }
+      />
     </View>
   );
 };
