@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, StyleSheet, ActivityIndicator, Image, Text} from 'react-native';
+import {View, StyleSheet, ActivityIndicator, Image, Text, LogBox} from 'react-native';
 import {RootScreenNavigationProps} from '../../type';
 import {normalize} from '../component/Metrics';
 import ButtonTextInput from '../component/TextInput';
@@ -20,6 +20,10 @@ const Detail_Tourist = ({route, navigation}: RootScreenNavigationProps) => {
   });
 
   useEffect(() => {
+    LogBox.ignoreLogs([
+      'Non-serializable values were found in the navigation state.'
+    ])
+
     if (Condition == 1) {
       let config = {
         method: 'get',

@@ -41,7 +41,7 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
 
   const [Condition, setCondition] = useState(1);
 
-  const [totalPages, setTotalpages] = useState(203);
+  const [totalPages, setTotalpages] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -57,8 +57,8 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
       axios(config)
         .then(response => {
           setDataTourist(response.data.data);
+          setTotalpages(response.data.total_pages)
           setCondition(0);
-
           _HandleFindUser();
         })
         .catch(error => {
@@ -180,7 +180,7 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
                 CreateTourist: false,
               });
               _HandleEmpty();
-            }, 2000);
+            }, 1000);
           }, 3000);
         })
         .catch(error => {
@@ -201,33 +201,6 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
     }
   };
 
-  const _HandleFindTourist = Value => {
-    let config = {
-      method: 'get',
-      url: `https://biroperjalanan.datacakra.com/api/Tourist/${Value}`,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Bearer ${User.Token}`,
-      },
-    };
-    axios(config)
-      .then(response => {
-        setInfoTourist({
-          id_tourist: response.data.id,
-          tourist_email: response.data.tourist_email,
-          tourist_location: response.data.tourist_location,
-          tourist_name: response.data.tourist_name,
-        });
-
-        setModalCondition({
-          ...ModalCondition,
-          EditTourist: true,
-        });
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
-  };
 
   const handlePageClick = (p: number) => setCurrentPage(p);
   const renderPaginationButtons = () => {
@@ -410,40 +383,45 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
           )}
 
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Profile', UserInfo)}
-              style={{
-                margin: normalize(5),
-              }}>
-              <Text
-                style={{...styles.LabelText, color: '#118EEA'}}
-                numberOfLines={1}>
-                Detail user
-              </Text>
-            </TouchableOpacity>
+            <View style={{flex:1, alignItems:'flex-end'}}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Profile', UserInfo)}
+                style={{
+                  margin: normalize(5),
+                }}>
+                <Text
+                  style={{...styles.LabelText, color: '#118EEA'}}
+                  numberOfLines={1}>
+                  Detail user
+                </Text>
+              </TouchableOpacity>
+            </View>
 
             <View
               style={{
                 borderWidth: 0.3,
+                marginVertical: normalize(5),
                 borderColor: '#000',
               }}></View>
 
-            <TouchableOpacity
-              onPress={() =>
-                setModalCondition({
-                  ...ModalCondition,
-                  CreateTourist: true,
-                })
-              }
-              style={{
-                margin: normalize(5),
-              }}>
-              <Text
-                style={{...styles.LabelText, color: '#118EEA'}}
-                numberOfLines={1}>
-                Create tourist
-              </Text>
-            </TouchableOpacity>
+            <View style={{flex:1, alignItems:'flex-start'}}>
+              <TouchableOpacity
+                onPress={() =>
+                  setModalCondition({
+                    ...ModalCondition,
+                    CreateTourist: true,
+                  })
+                }
+                style={{
+                  margin: normalize(5),
+                }}>
+                <Text
+                  style={{...styles.LabelText, color: '#118EEA'}}
+                  numberOfLines={1}>
+                  Create tourist
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -536,6 +514,8 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
           <IconFeather name={'user-plus'} size={normalize(20)} color={'#FFF'} />
         </TouchableOpacity> */}
 
+      </View>
+
         <ContainerModal
           visible={ModalCondition.CreateTourist}
           unVisibleStatus={true}
@@ -619,7 +599,6 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
             </View>
           }
         />
-      </View>
     </View>
   );
 };
