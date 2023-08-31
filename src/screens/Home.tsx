@@ -34,6 +34,7 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
   const [ModalCondition, setModalCondition] = useState({
     CreateTourist: false,
     EditTourist: false,
+    DeleteTourist: false,
     Alert: false,
     TextAlert: '',
   });
@@ -97,16 +98,16 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
       });
   };
 
-  const _HandleDeleteTourist = item => {
+  const _HandleDeleteTourist = () => {
     let data = {
-      tourist_email: item.tourist_email,
-      tourist_location: item.tourist_location,
-      tourist_name: item.tourist_name,
+      tourist_email: InfoTourist.tourist_email,
+      tourist_location: InfoTourist.tourist_location,
+      tourist_name: InfoTourist.tourist_name,
     };
 
     let config = {
       method: 'delete',
-      url: `https://biroperjalanan.datacakra.com/api/Tourist/${item.id}`,
+      url: `https://biroperjalanan.datacakra.com/api/Tourist/${InfoTourist.id_tourist}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: `Bearer ${User.Token}`,
@@ -116,9 +117,43 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
     axios(config)
       .then(response => {
         setCondition(1);
+        _HandleEmpty();
+
+        setModalCondition({
+          ...ModalCondition,
+          Alert: true,
+          TextAlert: 'Successfully delete',
+        });
+
+        setTimeout(() => {
+          setModalCondition({
+            ...ModalCondition,
+            Alert: false,
+            TextAlert: '',
+          });
+          setTimeout(() => {
+            setModalCondition({
+              ...ModalCondition,
+              DeleteTourist: false,
+            });
+            _HandleEmpty();
+          }, 1000);
+        }, 3000);
       })
       .catch(error => {
-        console.log('error', error);
+        setModalCondition({
+          ...ModalCondition,
+          Alert: true,
+          TextAlert: 'Unsuccessful deletion',
+        });
+
+        setTimeout(() => {
+          setModalCondition({
+            ...ModalCondition,
+            Alert: false,
+            TextAlert: '',
+          });
+        }, 3000);
       });
   };
 
@@ -475,7 +510,19 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    onPress={() => _HandleDeleteTourist(item)}
+                    onPress={() =>{
+                        setModalCondition({
+                          ...ModalCondition,
+                          DeleteTourist: true,
+                        });
+                        setInfoTourist({
+                          id_tourist: item.id,
+                          tourist_email: item.tourist_email,
+                          tourist_location: item.tourist_location,
+                          tourist_name:item.tourist_name,
+                        });
+                      }
+                    }
                     style={{paddingHorizontal: normalize(5)}}>
                     <IconFeather
                       name={'trash-2'}
@@ -565,6 +612,69 @@ const Home = ({route, navigation}: RootScreenNavigationProps) => {
                 width={'100%'}
                 onPress={() => _HandleCreateTourist()}
               />
+            </View>
+          }
+        />
+
+
+        <ContainerModal
+          visible={ModalCondition.DeleteTourist}
+          justifyContentContainer="flex-start"
+          animation="fadeIn"
+          backgroundColorAnimation="rgba(0,0,0,0.5)"
+          backgroundColorContainer="transparent"
+          unVisibleStatus={false}
+          paddingVerticalAnimation={normalize(10)}
+          Body={
+            <View
+              style={{
+                width:'100%',
+                height:'100%',
+                alignItems: 'center',
+                justifyContent:'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#FFF',
+                  borderRadius: 10,
+                  padding: normalize(5),
+                }}>
+                <Text
+                  style={{
+                    ...styles.LabelText,
+                    color: '#000',
+                  }}>
+                  Are you sure you want to remove the tourist?
+                </Text>
+
+                <View style={{flexDirection:'row', justifyContent:'center'}}>
+                  <View style={{paddingHorizontal:normalize(5)}}>
+                    <ButtonTouch
+                      label="No"
+                      width={'100%'}
+                      backgroundColor='transparent'
+                      color='#ED5E68'
+                      onPress={() => {
+                        _HandleEmpty();
+                        setModalCondition({
+                          ...ModalCondition,
+                          DeleteTourist: false,
+                        })
+                      }}
+                    />
+                  </View>
+
+                  <View style={{paddingHorizontal:normalize(5)}}>
+                    <ButtonTouch
+                      label="Yes"
+                      width={'100%'}
+                      backgroundColor='transparent'
+                      color='#118EEA'
+                      onPress={() => _HandleDeleteTourist()}
+                    />   
+                  </View>
+                </View>
+              </View>
             </View>
           }
         />
