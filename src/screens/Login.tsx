@@ -145,7 +145,14 @@ const Login = ({route, navigation}: RootScreenNavigationProps) => {
             label="Register"
             fontSize={normalize(12)}
             fontSizeTitle={normalize(12)}
-            onPress={() => navigation.navigate('Registration')}
+            onPress={() => {
+                navigation.navigate('Registration');
+                setUserInfo({
+                  email: '',
+                  password: '',
+                });
+              }
+            }
           />
         </View>
       </View>
